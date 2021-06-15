@@ -1,0 +1,131 @@
+{% extends 'base/index.html' %}
+
+{% block function %}
+
+    <section class="contact-form" id="section_ticket">
+        <div class="container">
+            <div class="section-heading">
+                <h2>booking confirmation</h2>
+                <h2 id="demo"></h2>
+            </div>
+            <div class="s009">
+                <form action="{{ url_for('search_flight') }}" method="post">
+                    <div class="inner-form">
+                        <div class="advance-search">
+                            <div class="row">
+                                <div class="input-field">
+                                    <img style="width:80%" src="{{ url_for('static', filename='img/vna1.png') }}"/>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="first_name" placeholder="First name..." required/>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="last_name" placeholder="Last name..." required />
+                                </div>
+                            </div>
+
+                            <div class="row second">
+                                <div class="input-field">
+                                    <input type="text" name="identity_card" placeholder="Identity card..." required />
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="email" placeholder="Email..." />
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="phone" placeholder="Phone..."  required/>
+                                </div>
+                            </div><br/>
+
+                            <span class="desc">SELECT SEAT</span>
+                            <div class="seat">
+                                <div class="seat-class">
+                                    {% for i, seat in enumerate_seat %}
+                                        {% if seat.is_empty == False %}
+                                            <button disabled class="seat-reserved">{{ seat.seat_location }}</button>
+                                        {% else %}
+                                            <button disabled>{{ seat.seat_location }}</button>
+                                        {% endif %}
+                                        {% if i % 4 == 3 %}
+                                            <br/>
+                                            <div class="radio-seat">
+                                                {% for j in range(i - 3, i + 1) %}
+                                                    <input type="radio" name="seat" id={{ seats[j].seat_location }} required/>
+                                                {% endfor %}
+                                            </div>
+                                            <br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="seat-note">
+                                    <button disabled class="seat-reserved"></button><span class="desc">Seat is reserved</span>
+                                    <button disabled></button><span class="desc">Seat is empty</span>
+                                </div>
+                            </div>
+
+                            <div class="row third">
+                                <div class="input-field">
+                                    <div class="result-count">
+                                        PRICE: <span style="font-size:20px">2,000,000.00 VND</span>
+                                    </div>
+                                    <div class="submit-search">
+                                        <input class="btn-delete" type="submit" value="RESET" />
+                                        <input class="btn-search" type="submit" value="ORDER TICKET NOW" style="width:300px" name="btn"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-hover table-air-ticket-info" style="text-align:left" >
+                                <thead>
+                                    <tr>
+                                        <td colspan=11><span class="desc">AIR TICKET INFORMATION</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">No</th>
+                                        <th scope="row">First name</th>
+                                        <th scope="row">Last name</th>
+                                        <th scope="row">Identity card</th>
+                                        <th scope="row">Email</th>
+                                        <th scope="row">Phone</th>
+                                        <th scope="row">Flight</th>
+                                        <th scope="row">Departure date</th>
+                                        <th scope="row">Seat</th>
+                                        <th scope="row">Price</th>
+                                        <th scope="row">Staff confirmed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Phan Huy</td>
+                                        <td>Tran</td>
+                                        <td>025832688</td>
+                                        <td>abc@fox</td>
+                                        <td>0775398511</td>
+                                        <td>TPHCM - Hanoi (id: 1)</td>
+                                        <td>32-13-2020</td>
+                                        <td>A1</td>
+                                        <td>6 triệu đô</td>
+                                        <td>{{ current_user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Do Trong</td>
+                                        <td>Nguyen</td>
+                                        <td>020202099</td>
+                                        <td>fox@abc</td>
+                                        <td>0887098511</td>
+                                        <td>TPHCM - Binh Thuan (id: 3)</td>
+                                        <td>32-13-2020</td>
+                                        <td>B1</td>
+                                        <td>12 triệu đô</td>
+                                        <td>{{ current_user.username }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

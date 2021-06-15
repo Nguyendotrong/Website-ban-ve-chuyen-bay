@@ -1,0 +1,78 @@
+{% extends 'base/index.html' %}
+
+{% block function %}
+<section class="contact-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h2>flight schedule</h2>
+                </div>
+            </div>
+            <div class="col-md-6 col-md-offset-3">
+                <form id="contact" action="#" method="post">
+                    <div class="row">
+                        <div class="col-md-6" style="padding: 40px 40px 40px 0">
+                            <img src="{{ url_for('static', filename='img/vietnamAirline.png') }}" alt="Flight Template">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="flight-schedule">
+                                <span>Flight code: </span>
+                                <span class ="info">1234</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>Departure airport: </span>
+                                <span class ="info">Ho Chi Minh city</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>Arrival airport: </span>
+                                <span class ="info">Thailand</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>Date: </span>
+                                <span class ="info">32/13/2020 9a.m</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>Time: </span>
+                                <span class ="info">1h20m</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>The number of seats in class 1: </span>
+                                <span class ="info">40</span>
+                            </div>
+                            <div class="flight-schedule">
+                                <span>The number of seats in class 2: </span>
+                                <span class ="info">20</span>
+                            </div>
+                        </div>
+                    </div><br/>
+                    <table class="table table-hover" style="text-align:left">
+                        <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Intermediate airport</th>
+                            <th scope="col">Stop time</th>
+                            <th scope="col">Note</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Sân bay Nội Bài</td>
+                            <td>10 phút</td>
+                            <td>Huy</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Sân bay Tân Sơn Nhất</td>
+                            <td>15 phút</td>
+                            <td>Trọng</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

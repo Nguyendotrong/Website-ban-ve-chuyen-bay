@@ -1,0 +1,86 @@
+{% extends 'base/index.html' %}
+
+{% block login_staff %}
+    <div class="nav navbar-nav navbar-right">
+        {% if current_user.is_authenticated %}
+        <span class="hover-user">
+            <a class="navbar-hover"><i class="fa fa-user"> User</i></a>
+            <div class="sub-content">
+                <span>Username: </span>{{ current_user.username }}
+            </div>
+        </span>
+        <a class="navbar-hover" href="{{ url_for('logout_usr') }}"><i class="fa fa-sign-out"> Log out</i></a>
+        {% else %}
+        <a class="navbar-hover" href="{{ url_for('login_staff') }}"><i class="fa fa-sign-in"></i> Sign in</a>
+        <a class="navbar-hover" href="{{ url_for('register') }}"><i class="fa fa-user-plus"></i> Sign up</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block function %}
+
+    <section class="contact-form" id="section_ticket">
+        <div class="container">
+            <div class="section-heading">
+                <h2>booking confirmation</h2>
+                <h2 id="demo"></h2>
+            </div>
+            <div class="s009">
+                <form action="{{ url_for('search_flight_staff') }}" method="post">
+                    <div class="inner-form">
+                        <div class="advance-search">
+                            <table class="table table-hover table-air-ticket-info" style="text-align:left" >
+                                <thead>
+                                    <tr>
+                                        <td colspan=11><span class="desc">AIR TICKET INFORMATION</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">No</th>
+                                        <th scope="row">First name</th>
+                                        <th scope="row">Last name</th>
+                                        <th scope="row">Identity card</th>
+                                        <th scope="row">Email</th>
+                                        <th scope="row">Phone</th>
+                                        <th scope="row">Flight</th>
+                                        <th scope="row">Departure date</th>
+                                        <th scope="row">Seat</th>
+                                        <th scope="row">Price</th>
+                                        <th scope="row">Staff confirmed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Phan Huy</td>
+                                        <td>Tran</td>
+                                        <td>025832688</td>
+                                        <td>abc@fox</td>
+                                        <td>0775398511</td>
+                                        <td>TPHCM - Hanoi (id: 1)</td>
+                                        <td>32-13-2020</td>
+                                        <td>A1</td>
+                                        <td>6 triệu đô</td>
+                                        <td>{{ current_user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Do Trong</td>
+                                        <td>Nguyen</td>
+                                        <td>020202099</td>
+                                        <td>fox@abc</td>
+                                        <td>0887098511</td>
+                                        <td>TPHCM - Binh Thuan (id: 3)</td>
+                                        <td>32-13-2020</td>
+                                        <td>B1</td>
+                                        <td>12 triệu đô</td>
+                                        <td>{{ current_user.username }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

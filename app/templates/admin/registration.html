@@ -1,0 +1,53 @@
+{% extends 'base/log.html' %}
+
+{% block banner_registration %}
+    <div class="banner_registration">
+        <div><img src="{{ url_for('static', filename='img/vna.png') }}"></div>
+    </div>
+{% endblock %}
+
+{% block function %}
+<div class="col-md-5 col-md-offset-1">
+    <section id="first-tab-group" class="tabgroup">
+        <div class="submit-form">
+            <h4>Registration:
+                {% if message %}
+                <span style="color: red; font: 17px normal"> {{ message }}</span>
+                {% endif %}
+            </h4>
+            <form action="{{ url_for('register') }}" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Id staff:</label>
+                        <input class="form-control date" type="text"  name="id-staff" id="id-staff" placeholder="Id has been provided by Admin..." required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Username:</label>
+                        <input class="form-control date" type="text" name="username" id="username" placeholder="Username..." required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Password:</label>
+                        <input class="form-control date" type="password"  name="password" id="password" placeholder="Password..." required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Confirm password:</label>
+                        <input class="form-control date" type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password..." required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Profile picture:</label>
+                        <input class="form-control date" type="file" name="avatar" id="avatar" required />
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
+                        <input class="btn button-register" type="submit" value="Register"/>
+                    </div>
+                    <div class="col-md-6" style="margin:12px -22px 0 22px">
+                        <a href="{{ url_for('login_staff') }}"><br/>Have an account already?</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}

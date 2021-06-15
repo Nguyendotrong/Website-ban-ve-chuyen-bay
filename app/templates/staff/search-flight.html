@@ -1,0 +1,794 @@
+{% extends 'base/index.html' %}
+
+    {% block login_staff %}
+        <div class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <span class="hover-user">
+                    <a class="navbar-hover"><i class="fa fa-user"> User</i></a>
+                    <div class="sub-content">
+                        <span>Username: </span>{{ current_user.username }}
+                    </div>
+                </span>
+                <a class="navbar-hover" href="{{ url_for('logout_usr') }}"><i class="fa fa-sign-out"> Log out</i></a>
+            {% else %}
+                <a class="navbar-hover" href="{{ url_for('login_staff') }}"><i class="fa fa-sign-in"></i> Sign in</a>
+                <a class="navbar-hover" href="{{ url_for('register') }}"><i class="fa fa-user-plus"></i> Sign up</a>
+            {% endif %}
+        </div>
+    {% endblock %}
+
+    {% block function %}
+        {% if scroll %}
+            <script>
+                {#document.getElementById('{{ scroll }}').scrollIntoView();#}
+                document.location.hash = '#' + '{{ scroll }}';
+            </script>
+    {% endif %}
+
+    <section class="contact-form" id="section_search">
+        <div class="container">
+            <div class="section-heading">
+                <h2>flight list</h2>
+            </div>
+            <div class="s009">
+                <form method="post" action="{{ url_for('search_flight_staff') }}">
+                    <div class="inner-form">
+                        <div class="advance-search">
+                            <span class="desc">ADVANCED SEARCH</span>
+                            <div class="row">
+                                <div class="input-field">
+                                    <div class="input-select">
+                                        <input type="date" name="date_flight" />
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                   <div class="input-select">
+                                       <select name="from_locate">
+                                           <option>Flight from...</option>
+                                            {% for airport in airports %}
+                                                <option>{{ airport.locate }}</option>
+                                            {% endfor %}
+                                       </select>
+                                   </div>
+                                </div>
+                               <div class="input-field">
+                                   <div class="input-select">
+                                       <select name="to_locate">
+                                           <option>Flight to...</option>
+                                            {% for airport in airports %}
+                                                <option>{{ airport.locate }}</option>
+                                            {% endfor %}
+                                       </select>
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="row third">
+                                <div class="input-field">
+                                    <div class="result-count">
+                                        <span>{{ count_result }}</span>results
+                                    </div>
+                                    <div class="submit-search">
+                                        <input class="btn-delete" type="submit" value="RESET" />
+                                        <input class="btn-search" type="submit" value="SEARCH" name="btn"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-top:20px">
+                                <table class="table table-hover" style="text-align:left" id="tb_schedules">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Id Flight</th>
+                                        <th scope="col">Departure airport</th>
+                                        <th scope="col">Arrival airport</th>
+                                        <th scope="col">Departure locate</th>
+                                        <th scope="col">Arrival locate</th>
+                                        <th scope="col">departure date</th>
+                                        <th scope="col">departure time</th>
+                                        <th scope="col">Empty seats</th>
+                                        <th scope="col">Book ticket </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i, schedule in  enumerate_schedules %}
+                                       <tr>
+                                            <th scope="row">{{ i + 1 }}</th>
+                                            <td>{{ schedule.idFlight }}</td>
+                                            <td>{{ schedule.departure_airport }}</td>
+                                            <td>{{ schedule.arrival_airport }}</td>
+                                            <td>{{ schedule.departure_locate }}</td>
+                                            <td>{{ schedule.arrival_locate }}</td>
+                                            <td>{{ schedule.departure_date }}</td>
+                                            <td>{{ schedule.departure_time }}</td>
+                                            <td>{{ schedule.empty_seats }}</td>
+                                            <td>
+                                                <button  class="btn-book-ticket"  type="submit"
+                                                         name="btn" value={{ schedule.idFlight }}>Book ticket</button>
+{#                                                <a onclick="myFunction({{ i + 1 }})" href="#section_ticket"  >#}
+{#                                                    Book ticket#}
+{#                                                </a>#}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section><br/><br/>
+
+     <section class="contact-form" id="section_ticket">
+        <div class="container">
+            <div class="section-heading">
+                <h2 style="margin-bottom:-30px">flight ticket</h2>
+
+            </div>
+            <div class="item-tickets">
+                <a href="#section_search"><i class="fa fa-search"></i> Search Flight</a>
+            </div>
+            <div class="s009">
+                <form action="{{ url_for('search_flight_staff') }}" method="post">
+                    <div class="inner-form">
+                        <div class="advance-search">
+                            <span  class="desc">ORDER TICKETS</span>
+                            <div class="mess_err"> <a href="#section_search">{{ mess_err }}</a></div>
+
+                            <table class="table table-hover" style="text-align:left" >
+                                <thead>
+                                    <tr>
+                                        <th scope="row" >Id Flight</th>
+                                        <th scope="row">departure airport</th>
+                                        <th scope="row">arrival airport</th>
+                                        <th scope="row">departure date</th>
+                                        <th scope="row">departure time</th>
+                                        <th scope="row">empty seats</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                         {% if flight %}
+                                            <td>{{ flight.idFlight }} </td>
+                                            <td>{{ flight.departure_airport }}</td>
+                                            <td>{{ flight.arrival_airport }}</td>
+                                            <td>{{ flight.departure_date }}</td>
+                                            <td>{{ flight.departure_time }}</td>
+                                            <td>{{ flight.empty_seats }}</td>
+                                         {% else %}
+                                            <td><a href="#section_search">Choose in above...</a></td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                        {% endif %}
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="row">
+                                <div class="input-field">
+                                    <input type="text" name="id_flight" placeholder="Id flight..." required/>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="first_name" placeholder="First name..." required/>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="last_name" placeholder="Last name..." required />
+                                </div>
+                            </div>
+
+                            <div class="row second">
+                                <div class="input-field">
+                                    <input type="text" name="identity_card" placeholder="Identity card..." required />
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="email" placeholder="Email..." />
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" name="phone" placeholder="Phone..."  required/>
+                                </div>
+                            </div><br/>
+
+                            <span class="desc">SELECT SEAT</span>
+                            <div class="seat">
+                                <div class="seat-class">
+                                    {% for i, seat in enumerate_seat %}
+                                        {% if seat.is_empty == False %}
+                                            <button disabled class="seat-reserved">{{ seat.seat_location }}</button>
+                                        {% else %}
+                                            <button disabled>{{ seat.seat_location }}</button>
+                                        {% endif %}
+                                        {% if i % 4 == 3 %}
+                                            <br/>
+                                            <div class="radio-seat">
+                                                {% for j in range(i - 3, i + 1) %}
+                                                    {% if seats[j].is_empty %}
+                                                        <input type="radio" name="seat" value="{{ seats[j].seat_location }}" required/>
+                                                    {% else %}
+                                                        <input disabled type="radio" name="seat" value="{{ seats[j].seat_location }}" required/>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="seat-note">
+                                    <button disabled class="seat-reserved"></button><span class="desc">Seat is reserved</span>
+                                    <button disabled></button><span class="desc">Seat is empty</span>
+                                </div>
+                            </div>
+
+                            <div class="row third">
+                                <div class="input-field">
+                                    <div class="result-count">
+                                        PRICE: <span style="font-size:20px"> VND</span>
+                                    </div>
+                                    <div class="submit-search">
+                                        <input class="btn-delete" type="submit" value="RESET" />
+                                        <input onclick="confirmBookTicket()" class="btn-search" type="submit" value="ORDER TICKET NOW" style="width:300px" name="btn"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="tabs-content" id="weather">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h2>Check Weather For 5 NEXT Days</h2>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div class="col-md-12">
+                        <div class="weather-content">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="tabs clearfix" data-tabgroup="second-tab-group">
+                                        <li><a href="#monday" class="active">Monday</a></li>
+                                        <li><a href="#tuesday">Tuesday</a></li>
+                                        <li><a href="#wednesday">Wednesday</a></li>
+                                        <li><a href="#thursday">Thursday</a></li>
+                                        <li><a href="#friday">Friday</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-12">
+                                    <section id="second-tab-group" class="weathergroup">
+                                        <div id="monday">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Khanh Hoa</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-03.png') }}" alt="">
+                                                        </div>
+                                                        <span>32&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>26&deg;</span></li>
+                                                            <li>12PM <span>32&deg;</span></li>
+                                                            <li>6PM <span>28&deg;</span></li>
+                                                            <li>12AM <span>22&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ha Noi</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-02.png') }}" alt="">
+                                                        </div>
+                                                        <span>28&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>20&deg;</span></li>
+                                                            <li>12PM <span>28&deg;</span></li>
+                                                            <li>6PM <span>26&deg;</span></li>
+                                                            <li>12AM <span>18&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ho Chi Minh City</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-01.png') }}" alt="">
+                                                        </div>
+                                                        <span>33&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>26&deg;</span></li>
+                                                            <li>12PM <span>33&deg;</span></li>
+                                                            <li>6PM <span>29&deg;</span></li>
+                                                            <li>12AM <span>27&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tuesday">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Khanh Hoa</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-02.png') }}" alt="">
+                                                        </div>
+                                                        <span>28&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>18&deg;</span></li>
+                                                            <li>12PM <span>27&deg;</span></li>
+                                                            <li>6PM <span>25&deg;</span></li>
+                                                            <li>12AM <span>17&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ha Noi</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-03.png') }}" alt="">
+                                                        </div>
+                                                        <span>31&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>19&deg;</span></li>
+                                                            <li>12PM <span>28&deg;</span></li>
+                                                            <li>6PM <span>22&deg;</span></li>
+                                                            <li>12AM <span>18&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ho Chi Minh City</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-01.png') }}" alt="">
+                                                        </div>
+                                                        <span>26&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>19&deg;</span></li>
+                                                            <li>12PM <span>26&deg;</span></li>
+                                                            <li>6PM <span>22&deg;</span></li>
+                                                            <li>12AM <span>20&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="wednesday">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Khanh Hoa</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-03.png') }}" alt="">
+                                                        </div>
+                                                        <span>31&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>19&deg;</span></li>
+                                                            <li>12PM <span>28&deg;</span></li>
+                                                            <li>6PM <span>22&deg;</span></li>
+                                                            <li>12AM <span>18&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ha Noi</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-01.png') }}" alt="">
+                                                        </div>
+                                                        <span>34&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>28&deg;</span></li>
+                                                            <li>12PM <span>34&deg;</span></li>
+                                                            <li>6PM <span>30&deg;</span></li>
+                                                            <li>12AM <span>29&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Ho Chi Minh City</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-02.png') }}" alt="">
+                                                        </div>
+                                                        <span>28&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>18&deg;</span></li>
+                                                            <li>12PM <span>27&deg;</span></li>
+                                                            <li>6PM <span>25&deg;</span></li>
+                                                            <li>12AM <span>17&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="thursday">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Myanmar</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-01.png') }}" alt="">
+                                                        </div>
+                                                        <span>27&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>21&deg;</span></li>
+                                                            <li>12PM <span>27&deg;</span></li>
+                                                            <li>6PM <span>22&deg;</span></li>
+                                                            <li>12AM <span>18&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Thailand</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-02.png') }}" alt="">
+                                                        </div>
+                                                        <span>28&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>18&deg;</span></li>
+                                                            <li>12PM <span>27&deg;</span></li>
+                                                            <li>6PM <span>25&deg;</span></li>
+                                                            <li>12AM <span>17&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>India</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-03.png') }}" alt="">
+                                                        </div>
+                                                        <span>31&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>19&deg;</span></li>
+                                                            <li>12PM <span>28&deg;</span></li>
+                                                            <li>6PM <span>22&deg;</span></li>
+                                                            <li>12AM <span>18&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="friday">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Myanmar</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-03.png') }}" alt="">
+                                                        </div>
+                                                        <span>33&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>28&deg;</span></li>
+                                                            <li>12PM <span>33&deg;</span></li>
+                                                            <li>6PM <span>29&deg;</span></li>
+                                                            <li>12AM <span>27&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>Thailand</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-02.png') }}" alt="">
+                                                        </div>
+                                                        <span>31&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>24&deg;</span></li>
+                                                            <li>12PM <span>31&deg;</span></li>
+                                                            <li>6PM <span>26&deg;</span></li>
+                                                            <li>12AM <span>23&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="weather-item">
+                                                        <h6>India</h6>
+                                                        <div class="weather-icon">
+                                                            <img src="{{ url_for('static', filename='img/weather-icon-01.png') }}" alt="">
+                                                        </div>
+                                                        <span>28&deg;C</span>
+                                                        <ul class="time-weather">
+                                                            <li>6AM <span>24&deg;</span></li>
+                                                            <li>12PM <span>28&deg;</span></li>
+                                                            <li>6PM <span>26&deg;</span></li>
+                                                            <li>12AM <span>22&deg;</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="service-item first-service">
+                        <div class="service-icon"></div>
+                        <h4>Easy Tooplate</h4>
+                        <p>Donec varius porttitor iaculis. Integer sollicitudin erat et ligula viverra vulputate. In in quam efficitur, pulvinar justo ut, tempor nunc. Phasellus pharetra quis odio.</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-item second-service">
+                        <div class="service-icon"></div>
+                        <h4>Unique Ideas</h4>
+                        <p>Cras ligula diam, tristique at aliquam at, fermentum auctor turpis. Proin leo massa, iaculis elementum massa et, consectetur varius dolor. Fusce sed ipsum sit.</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-item third-service">
+                        <div class="service-icon"></div>
+                        <h4>Best Support</h4>
+                        <p>Fusce leo dui. Mauris et justo eget arcu ultricies porta. Nulla facilisi. Nulla nec risus sit amet magna hendrerit venenatis. Sed porta tincidunt lectus eget ultrices.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="tabs-content" id="recommended-hotel">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h2>Recommended Hotel For You</h2>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div class="col-md-4">
+                            <ul class="tabs clearfix" data-tabgroup="third-tab-group">
+                                <li><a href="#livingroom" class="active">Living Room <i class="fa fa-angle-right"></i></a></li>
+                                <li><a href="#suitroom">Suit Room <i class="fa fa-angle-right"></i></a></li>
+                                <li><a href="#swimingpool">Swiming Pool <i class="fa fa-angle-right"></i></a></li>
+                                <li><a href="#massage">Massage Service <i class="fa fa-angle-right"></i></a></li>
+                                <li><a href="#fitness">Fitness Life <i class="fa fa-angle-right"></i></a></li>
+                                <li><a href="#event">Evening Event <i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <section id="third-tab-group" class="recommendedgroup">
+                            <div id="livingroom">
+                                <div class="text-content">
+                                    <iframe width="100%" height="400px" src="https://www.youtube.com/embed/rMxTreSFMgE">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div id="suitroom">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="owl-suiteroom" class="owl-carousel owl-theme">
+                                            <div class="item">
+                                                <div class="suiteroom-item">
+                                                    <img src="{{ url_for('static', filename='img/suite-02.jpg') }}" alt="">
+                                                    <div class="text-content">
+                                                        <h4>Clean And Relaxing Room</h4>
+                                                        <span>Aurora Resort</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="suiteroom-item">
+                                                    <img src="{{ url_for('static', filename='img/suite-01.jpg') }}" alt="">
+                                                    <div class="text-content">
+                                                        <h4>Special Suite Room TV</h4>
+                                                        <span>Khao Yai Hotel</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="suiteroom-item">
+                                                    <img src="{{ url_for('static', filename='img/suite-03.jpg') }}" alt="">
+                                                    <div class="text-content">
+                                                        <h4>The Best Sitting</h4>
+                                                        <span>Hotel Grand</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="swimingpool">
+                                <img src="{{ url_for('static', filename='img/swiming-pool.jpg') }}" alt="">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-content">
+                                            <h4>Lovely View Swiming Pool For Special Guests</h4>
+                                            <span>Victoria Resort and Spa</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="massage">
+                                <img src="{{ url_for('static', filename='img/massage-service.jpg') }}" alt="">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-content">
+                                            <h4>Perfect Place For Relaxation</h4>
+                                            <span>Napali Beach</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="fitness">
+                                <img src="{{ url_for('static', filename='img/fitness-service.jpg') }}" alt="">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-content">
+                                            <h4>Insane Street Workout</h4>
+                                            <span>Hua Hin Beach</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="event">
+                                <img src="{{ url_for('static', filename='img/evening-event.jpg') }}" alt="">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-content">
+                                            <h4>Finest Winery Night</h4>
+                                            <span>Queen Restaurant</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="most-visited">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h2>Most Visited Places</h2>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="owl-mostvisited" class="owl-carousel owl-theme">
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-01.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>1206 visits</h4>
+                                    <span>Buon Ma Thuot</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-02.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>1442 visits</h4>
+                                    <span>Ca Mau</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-03.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>997 visits</h4>
+                                    <span>Can Tho</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-04.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>3490 visits</h4>
+                                    <span>Con Dao</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-05.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>6715 visits</h4>
+                                    <span>Da Nang</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-06.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>2274 visits</h4>
+                                    <span>Hoi An</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-07.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>1055 visits</h4>
+                                    <span>Hai Phong</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-08.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>10922 visits</h4>
+                                    <span>Ho Chi Minh City</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-09.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>7656 visits</h4>
+                                    <span>Nha Trang</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item col-md-12">
+                            <div class="visited-item">
+                                <img src="{{ url_for('static', filename='img/place-10.jpg') }}" alt="">
+                                <div class="text-content">
+                                    <h4>918 visits</h4>
+                                    <span>Rach Gia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        {#function myFunction(i) {#}
+        {#    document.getElementById("td_idFlight").innerHTML = document.getElementById("tb_schedules").rows[i].cells[1].innerHTML;#}
+        {#    document.getElementById("td_departure_airport").innerHTML = document.getElementById("tb_schedules").rows[i].cells[2].innerHTML;#}
+        {#    document.getElementById("td_arrival_airport").innerHTML = document.getElementById("tb_schedules").rows[i].cells[3].innerHTML;#}
+        {#    document.getElementById("td_departure_date").innerHTML = document.getElementById("tb_schedules").rows[i].cells[6].innerHTML;#}
+        {#    document.getElementById("td_departure_time").innerHTML = document.getElementById("tb_schedules").rows[i].cells[7].innerHTML;#}
+        {#    document.getElementById("td_empty_seats").innerHTML = document.getElementById("tb_schedules").rows[i].cells[8].innerHTML;#}
+        {#}#}
+        function confirmBookTicket() {
+            var txt = '';
+            var r = confirm("are you sure!");
+
+            if (r == true) {
+                txt = "You pressed OK!";
+            } else {
+                txt = "You pressed Cancel!";
+            }
+            document.getElementById("demo").innerHTML = txt;
+}
+    </script>
+{% endblock %}

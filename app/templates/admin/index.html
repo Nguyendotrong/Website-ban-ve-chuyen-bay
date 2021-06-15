@@ -1,0 +1,66 @@
+{% extends 'admin/master.html' %}
+
+{% block head_meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block head_tite %}
+    <title>Flight - Travel and Tour</title>
+{% endblock %}
+
+{% block head_css %}
+    <link rel="apple-touch-icon" href="apple-touch-icon.html">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tooplate-style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log-style.css') }}"/>
+
+{% endblock %}
+
+{% block head %}
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='img/logo-i.png') }}"/>
+{% endblock %}
+
+    {% block body %}
+
+        {% if current_user.is_authenticated and current_user.username == 'nguyentrong' %}
+            <section class="banner">
+                <div class="container">
+                    <div class="row">
+                        <div>
+                            <div class="left-side">
+                                <div class="logo">
+                                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Flight Template">
+                                </div>
+                                <div class="tabs-content">
+                                    <ul class="social-links">
+                                        <li><a style="width: 125.4%" href="{{ url_for('search_flight_staff') }}">Flight schedule<i class="fa fa-plane"></i></a></li>
+                                        <li><a style="width: 125.4%" href="{{ url_for('search_flight_staff') }}">Flight booking<i class="fa fa-first-order"></i></a></li>
+                                        <li><a style="width: 125.4%" href="#">Flights booked<i class="fa fa-ticket"></i></a></li>
+                                        <li><a style="width: 125.4%" href="{{ url_for('revenue_month') }}">Revenue<i class="fa fa-money"></i></a></li>
+                                        <li><a style="width: 125.4%" href="#">Rule changes<i class="fa fa-exchange"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-md-offset-1">
+                            <section id="first-tab-group" class="tabgroup">
+                                <div class="submit-form">
+                                    <h4>Vietnam Airlines</h4>
+                                    <img src="{{ url_for('static', filename='img/vna.png') }}" alt="Flight Template">
+                                    <p>Vietnam Airlines is the flag carrier of Vietnam. The airline flies to 64 destinations in 17 countries, excluding codeshared services.</p>
+                                    <p>Vietnam Airlines is committed to collaborating with shareholders, the transparency of information and disclosure publicity, maintaining and improving communication to shareholders and achieving an efficient business operation based on balancing the interests shareholders and the economic development of Vietnam.</p>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% else %}
+            {% include 'admin/login.html' %}
+        {% endif %}
+    {% endblock %}

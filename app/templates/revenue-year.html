@@ -1,0 +1,134 @@
+{% extends 'base/index.html' %}
+
+{% block login_staff %}
+    <div class="nav navbar-nav navbar-right">
+        {% if current_user.is_authenticated %}
+        <span class="hover-user">
+            <a class="navbar-hover"><i class="fa fa-user"> User</i></a>
+            <div class="sub-content">
+                <span>Username: </span>{{ current_user.username }}
+            </div>
+        </span>
+        <a class="navbar-hover" href="{{ url_for('logout_usr') }}"><i class="fa fa-sign-out"> Log out</i></a>
+        {% else %}
+        <a class="navbar-hover" href="{{ url_for('login_staff') }}"><i class="fa fa-sign-in"></i> Sign in</a>
+        <a class="navbar-hover" href="{{ url_for('register') }}"><i class="fa fa-user-plus"></i> Sign up</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block function %}
+
+    <section class="contact-form">
+        <div class="container">
+            <div class="s009">
+                <form action="{{ url_for('search_flight_staff') }}" method="post">
+                    <div class="inner-form">
+                        <div class="advance-search">
+                            <div class="col-md-12">
+                                <div class="section-heading">
+                                    <h2>Annual revenue statistics</h2>
+                                </div>
+                                <div class="item-tickets">
+                                    <a href="{{ url_for('revenue_month') }}"><i class="fa fa-money"></i> Revenue Month</a>
+                                </div>
+                            </div>
+                            <div class="report-month">
+                                <span>Year: </span>
+                                <span>2020</span>
+                            </div>
+                            <table class="table table-hover table-air-ticket-info" style="text-align:left" >
+                                <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Month</th>
+                                    <th scope="col">Flights</th>
+                                    <th scope="col">Revenue</th>
+                                    <th scope="col">Rate</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>11</td>
+                                    <td>101</td>
+                                    <td>16.917.500.000</td>
+                                    <td>72%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="container">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        let myChart = document.getElementById('myChart').getContext('2d');
+
+        Chart.defaults.global.defaultFontFamily = 'Lato';
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#777';
+
+        let massPopChart = new Chart(myChart, {
+            type:'bar',
+            data:{
+                labels:['Id flight 1', 'Id flight 2', 'Id flight 3', 'Id flight 4', 'Id flight 5', 'Id flight 6'],
+                datasets:[{
+                    label:'Price',
+                    data:[
+                        317594,
+                        381045,
+                        343060,
+                        406519,
+                        405162,
+                        350072,
+                        300030,
+                    ],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                    ],
+                    borderWidth:1,
+                    borderColor:'#777',
+                    hoverBorderWidth:3,
+                    hoverBorderColor:'#000'
+                }]
+            },
+            options:{
+                title:{
+                    display:true,
+                    text:'The chart shows the sales by month',
+                    fontSize:25
+                },
+                legend:{
+                    display:true,
+                    position:'right',
+                        labels:{
+                        fontColor:'#000'
+                    }
+                },
+                layout:{
+                    padding:{
+                        left:50,
+                        right:0,
+                        bottom:0,
+                        top:0
+                    }
+                },
+                tooltips:{
+                    enabled:true
+                }
+            }
+        });
+    </script>
+{% endblock %}

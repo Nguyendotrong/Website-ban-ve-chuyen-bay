@@ -1,0 +1,61 @@
+div.seat {
+    display: flex;
+    margin-top:3%;
+}
+
+div.seat-class {
+    width: 80%;
+}
+
+div.seat-note {
+    width: 20%;
+}
+
+div.seat-note button {
+    width: 20% !important;
+}
+
+div.seat button {
+    margin: 0 10px;
+    width: 5%;
+    height: 40px;
+    background: #666;
+    color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all .2s;
+}
+
+button.seat-reserved {
+    background: #ffe165 !important;
+    color: black !important;
+    transition: all .2s;
+}
+
+div.seat button:hover, button.seat-reserved:hover {
+    background: #364a59 !important;
+    color: #fff !important;
+}
+
+div.radio-seat {
+    display:flex;
+    margin-left: 31.5%;
+}
+
+div.radio-seat input {
+    width:3%;
+    margin-left: 8.45%;
+}
+
+button.btn-book-ticket {
+    padding:3% 7%;
+    border: 0;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.15);
+    background: #364a59;
+    color: #fff;
+    transition: all .2s;
+}
+
+button.btn-book-ticket:hover {
+    background: #ffe165;
+    color: black;
+}

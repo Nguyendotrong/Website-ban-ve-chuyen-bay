@@ -1,0 +1,25 @@
+{% extends 'base/log.html' %}
+
+{% block banner_registration %}
+    <div class="banner_registration">
+        <div><img src="{{ url_for('static', filename='img/vna.png') }}"></div>
+    </div>
+{% endblock %}
+
+{% block function %}
+<div class="content clearfix">
+    <ul id="p-frm">
+        <form action="{{ url_for('login_staff') }}" method="post">
+            {% if message %}
+                <div style="color: red; font: 17px normal; margin: 0 -7px"> {{ message }} </div>
+            {% endif %}
+            <li><strong>Username</strong></li>
+            <li><input type="text" name="username" id="username" placeholder="Username" required /></li>
+            <li><strong>Password</strong></li>
+            <li><input type="password" name="password" id="password" placeholder="Password" required /></li>
+            <li><input type="submit" class="btn" id="login" value="Login"/></li>
+            <li style="text-align: center;"><a style="color: white;" href="{{ url_for('register') }}">Sign up</a></li>
+        </form>
+    </ul>
+</div>
+{% endblock %}

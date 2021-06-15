@@ -1,0 +1,31 @@
+{% block function %}
+{% include 'admin/master.html' %}
+<section class="contact-us">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <br/><h2>HT AIRLINE INFORMATION</h2><br/>
+                    <p> Pellentesque quis turpis et lectus auctor gravida ut vel orci. Proin et tempus nunc. Proin sed justo neque. Donec et tempus ligula, et gravida elit. Vivamus vitae placerat metus.</p>
+                </div>
+            </div>
+            <div style="margin: 0 0 20px 0; text-align: center">
+                <img width="80%" src="{{ url_for('static', filename='img/bg1.jpg') }}"/>
+            </div>
+            <div class="col-md-4">
+                <h6>Proin dignissim rhoncus</h6>
+                    <p>Aliquam elit metus, varius in ligula sed, posuere aliquam nibh. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis vel rhoncus lectus.</p>
+            </div>
+            <div class="col-md-4">
+                <h6>Duis vehicula quis elit</h6>
+                <p>Donec nisl felis, eleifend eu diam ut, condimentum finibus erat. Aliquam luctus commodo ultricies. Etiam in tellus mi. Nam lobortis est magna, et rutrum ipsum lacinia id.</p>
+            </div>
+            <div class="col-md-4">
+                <h6>Duis vel rhoncus lectus</h6>
+                <p>Mauris aliquet eget lorem a tempor. Morbi in dui sed orci placerat ultrices sed a mi. Praesent eget porttitor enim. In tempor eros mi. Morbi a lobortis ante. Sed blandit vitae diam commodo ultricies.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

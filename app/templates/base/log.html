@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Flight - Travel and Tour</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.html">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tooplate-style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log-style.css') }}"/>
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='img/go-to-top.png') }}"/>
+</head>
+
+<body>
+    {% block banner_registration %}
+    {% endblock %}
+    <section class="banner">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <div class="left-side">
+                        <div class="logo">
+                            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Flight Template">
+                        </div>
+                        <div class="tabs-content">
+                            <ul class="social-links">
+                                <li><a href="https://www.facebook.com/tranphanhuy1502">Log in with <em>Facebook</em><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="http://youtube.com/">Log in with <em>Google</em><i class="fa fa-google"></i></a></li>
+                                <li><a href="http://instagram.com/">Log in with <em>Instagram</em><i class="fa fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                        {% block register %}
+                        {% endblock %}
+                        <div class="page-direction-button">
+                            <a href="{{ url_for('search_flight_staff') }}"><i class="fa fa-home"></i> GO BACK HOME</a>
+                        </div>
+                    </div>
+                </div>
+
+                {% block function %}
+                {% endblock %}
+
+            </div>
+        </div>
+    </section>
+</body>
+</html>

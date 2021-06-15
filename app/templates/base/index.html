@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Flight - Travel and Tour</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.html">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hero-slider.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tooplate-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select-seat.css') }}"/>
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='img/go-to-top.png') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- css search -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,600,700" rel="stylesheet" />
+    <!-- css bonus -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/css-bonus/datepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/css-bonus/owl-carousel.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".goToTop > a").hide();
+            $(".goToTop > a").click(function() {
+                $("html, body").animate({scrollTop:0}, 800);
+			});
+			$(window).scroll(function() {
+				if ($("html, body").scrollTop() > 200) {
+					$(".goToTop > a").fadeIn("slow");
+				} else {
+					$(".goToTop > a").fadeOut("slow");
+				}
+			});
+		});
+	</script>
+
+</head>
+
+<body class="container">
+
+    <div class="goToTop">
+        <a href="#top"><img src="{{ url_for('static', filename='img/go-to-top.png') }}"/></a>
+    </div>
+
+    <section class="page-heading container" id="top">
+        <div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="logo">
+                        {% if request.path == url_for('search_flight_staff')
+                            or request.path == url_for('check_booking_status_staff')
+                            or request.path == url_for('revenue_month')
+                            or request.path == url_for('revenue_year')
+                        %}
+                            <a href="{{ url_for('search_flight_staff') }}">
+                                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Flight Template">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('search_flight') }}">
+                                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Flight Template">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="page-direction-button">
+                        {% if request.path == url_for('search_flight_staff')
+                            or request.path == url_for('check_booking_status_staff')
+                            or request.path == url_for('revenue_month')
+                            or request.path == url_for('revenue_year')
+                        %}
+                            <a href="{{ url_for('search_flight_staff') }}"><i class="fa fa-home"></i>Go Back Home</a>
+                        {% else %}
+                            <a href="{{ url_for('search_flight') }}"><i class="fa fa-home"></i>Go Back Home</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="navbar">
+        {% if request.path == url_for('search_flight_staff')
+            or request.path == url_for('check_booking_status_staff')
+            or request.path == url_for('revenue_month')
+            or request.path == url_for('revenue_year')
+        %}
+            <a href="{{ url_for('search_flight_staff') }}" style="width:12%"><img src="{{ url_for('static', filename='img/vna.png') }}"></a>
+            <a class="navbar-hover" href="{{ url_for('search_flight_staff') }}"><i class="fa fa-fw fa-home"></i> Home</a>
+
+            {% if current_user.is_authenticated %}
+                <a class="navbar-hover" href="{{ url_for('check_booking_status_staff') }}"><i class="fa fa-fw fa-plane"></i> Booking Status</a>
+            {% endif %}
+
+            {% if current_user.is_authenticated and current_user.username == 'nguyentrong' %}
+                <a class="navbar-hover" href="/admin"><i class="fa fa-fw fa-tasks"></i> Manage</a>
+            {% endif %}
+
+        {% else %}
+            <a href="{{ url_for('search_flight') }}" style="width:12%"><img src="{{ url_for('static', filename='img/vna.png') }}"></a>
+            <a class="navbar-hover" href="{{ url_for('search_flight') }}"><i class="fa fa-fw fa-home"></i> Home</a>
+            <a class="navbar-hover" href="{{ url_for('check_booking_status') }}"><i class="fa fa-fw fa-plane"></i> Booking Status</a>
+
+        {% endif %}
+
+        <a class="navbar-hover" href="{{ url_for('contact') }}"><i class="fa fa-fw fa-envelope"></i> Contact</a>
+
+        {% block login_staff %}
+        {% endblock %}
+    </div>
+
+    {% block function %}
+    {% endblock %}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="primary-button">
+                        <a href="#" class="scroll-top">Back To Top</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <ul class="social-icons">
+                        <li><a href="https://www.facebook.com/tranphanhuy1502"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p>Copyright &copy; 2020 Phan Huy Tran and Do Trong Nguyen</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../../ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/vendor/jquery-1.11.2.min.js') }}"><\/script>')</script>
+
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/datepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script src="../../../ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // navigation click actions
+        $('.scroll-link').on('click', function(event){
+            event.preventDefault();
+            var sectionID = $(this).attr("data-id");
+            scrollToID('#' + sectionID, 750);
+        });
+        // scroll to top action
+        $('.scroll-top').on('click', function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop:0}, 'slow');
+        });
+        // mobile nav toggle
+        $('#nav-toggle').on('click', function (event) {
+            event.preventDefault();
+            $('#main-nav').toggleClass("open");
+        });
+    });
+    // scroll function
+    function scrollToID(id, speed){
+        var offSet = 0;
+        var targetOffset = $(id).offset().top - offSet;
+        var mainNav = $('#main-nav');
+        $('html,body').animate({scrollTop:targetOffset}, speed);
+        if (mainNav.hasClass("open")) {
+            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+            mainNav.removeClass("open");
+        }
+    }
+    if (typeof console === "undefined") {
+        console = {
+            log: function() { }
+        };
+    }
+    </script>
+</body>
+</html>
